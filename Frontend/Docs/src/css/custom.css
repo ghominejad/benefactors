@@ -1,0 +1,181 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: rgb(33, 175, 144);
+  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-code-font-size: 95%;
+}
+/* new theme*/
+:root{
+  --ifm-color-primary: #3578e5;
+  --ifm-color-primary-dark: #1d68e1;
+  --ifm-color-primary-darker: #1b62d4;
+  --ifm-color-primary-darkest: #1751af;
+  --ifm-color-primary-light: #4e89e8;
+  --ifm-color-primary-lighter: #5a91ea;
+  --ifm-color-primary-lightest: #80aaef;
+  --ifm-code-font-size: 95%;
+  --ifm-code-background:#f9f2f4;
+  --ifm-code-color:#c7254e;
+  --ifm-menu-color-active:#0071BC;
+  --ifm-link-color:#0071BC;
+  --ifm-font-base-color: #444;
+
+  /* rgba(255,255,255,0.6) */
+}
+
+html[data-theme='dark'] {
+  
+  --ifm-link-color:#0098FF;
+  --ifm-font-base-color: rgba(255,255,255,0.6);
+  --ifm-heading-color:white;
+  --ifm-background-color:#2C2C32;
+  --ifm-blockquote-color : #768ead;
+
+}
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.hero.hero--primary{
+  background-image: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.0) ) ,  url(/docs/img/web-bg.jpg);
+    background-position: bottom;
+    background-size: cover;
+}
+
+/* sun / moon*/
+.react-toggle-track-x, .react-toggle-track-check{
+  bottom: 0px;
+  left: 2px!important;
+  top:0px!important;
+  width: 20px!important;
+  height: 80%!important;
+}
+.react-toggle-track-x{
+  padding-left: 0px;
+  left:unset;
+  right: 3px!important;
+}
+.react-toggle-track>div>span {
+  align-items: center!important;
+  display: flex!important;
+  height: 100%!important;
+  justify-content: center!important;
+  position: relative!important;
+  width:100%!important; 
+  background-size: cover!important;;
+  display: inline-block!important;;
+  background-size: cover;
+  display: inline-block
+}
+
+.react-toggle-track>div>span:before {
+  content: ''!important;
+}
+
+
+
+.react-toggle-track>div:nth-child(1)>span {
+  background-image: url(/img/theme-dark.svg)!important;
+}
+.react-toggle-track>div:nth-child(2)>span {
+  background-image: url(/img/theme-light.svg)!important;
+}
+
+
+/* RTL */
+
+html {
+  direction: rtl;
+}
+
+.docSidebarContainer_node_modules-\@docusaurus-theme-classic-src-theme-DocPage- {
+  border-left: 1px solid var(--ifm-contents-border-color);
+  border-right:none;
+}
+
+.contents.contents__left-border {
+  border-right-color: var(--ifm-contents-border-color);
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-left:none; 
+}
+
+.algolia-autocomplete .ds-dropdown-menu {
+  left:0!important;
+  right:auto!important;
+  display: block!important;
+}
+
+.algolia-autocomplete .ds-dropdown-menu {
+  max-width: 600px;
+  min-width: 500px;
+}
+
+blockquote {
+  border-right: 6px solid var(--ifm-color-emphasis-300);
+  border-left: none;
+}
+
+.hash-link {
+  margin-right: -1.25rem;
+  padding-left: 1.25rem;
+  margin-left: 0!important;
+  padding-right: 0!important;
+}
+
+.contents, .contents ul {
+  padding-right: var(--ifm-contents-padding-left);
+  padding-left:unset;
+}
+
+.menu .menu__list {
+  padding-right: 15px;
+  padding-left: initial;
+}
+
+.menu>.menu__list
+{
+  padding-right: 0;
+}
+
+.navbar .navbar__brand {
+  margin-left: 1rem;
+  margin-right: 0;
+}
+
+.navbar .navbar__logo {
+  margin-left: 0.5rem;
+  margin-right:unset;
+}
+
+ul, ol {
+  padding-right: var(--ifm-list-left-padding);
+  padding-left:unset;
+}
+
+.copyButton_node_modules-\@docusaurus-theme-classic-src-theme-CodeBlock- {
+  color: #e0e0e0!important;
+  /* left: var(--ifm-pre-padding);
+  right: unset!important; */
+}
+
+.codeBlock_node_modules-\@docusaurus-theme-classic-src-theme-CodeBlock- 
+{
+  direction: ltr;
+}

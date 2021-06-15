@@ -1,0 +1,75 @@
+stages:
+  - build
+  - staging
+  - prod
+
+cache:
+  paths:
+  - node_modules/
+
+variables:
+  COMPOSE_FILE: /var/apps/benefactors/deploy/docker/docker-compose.yaml
+  SERVICE_ROOT: /var/apps/benefactors/front-end/docs
+  SERVICE_NAME: docs
+
+build_website:
+  stage: build
+  image: node:lts-alpine
+  script:
+    - apk update
+    - apk add yarn
+    - yarn install
+    - npm run-script build
+  artifacts:
+    paths:
+      - ./build
+  only:
+    - master
+
+deploy_staging:
+  image : ictu/sshpass
+  stage: staging
+  variables:
+    SSHPASS: $STAGING_SSH_PASS
+    TARGET_PATH : $STAGING_SSH_ADDRESS:$SERVICE_ROOT
+    SSH_ADDRESS: $STAGING_SSH_ADDRESS
+
+
+  script:
+    # Stop the compose
+    - sshpass -e ssh -p 2244 -o stricthostkeychecking=no $SSH_ADDRESS sudo docker-compose -f $COMPOSE_FILE stop $SERVICE_NAME
+    # sync `local/build` folder to `server/wwwroot`
+    - sshpass -e rsync -e "ssh -p 2244 -o StrictHostKeyChecking=no" --archive --verbose --compress --delete ./build/ $TARGET_PATH 
+    # Start the compose
+    - sshpass -e ssh -p 2244 -o stricthostkeychecking=no $SSH_ADDRESS sudo docker-compose -f $COMPOSE_FILE start $SERVICE_NAME
+  environment:
+    name: staging
+    url: http://$STAGING_DOMAIN
+  only:
+    - master
+
+deploy_prod:
+  #image : ictu/sshpass
+  stage: prod
+  variables:
+    SSHPASS: $PRODUCTION_SSH_PASS
+    SSH_ADDRESS: $PRODUCTION_SSH_ADDRESS
+    TARGET_PATH : $PRODUCTION_SSH_ADDRESS:$SERVICE_ROOT
+
+  script:
+    # Stop the compose
+    #- test -f $COMPOSE_FILE && sshpass -e ssh -o stricthostkeychecking=no $USER sudo docker-compose -f $COMPOSE_FILE stop
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS sudo docker-compose -f $COMPOSE_FILE stop $SERVICE_NAME
+    # sync `local/build` folder to `server/wwwroot`
+    - sshpass -e rsync -e "ssh -o StrictHostKeyChecking=no" --archive --verbose --compress --delete ./build/ $TARGET_PATH
+    # Start the compose
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_ADDRESS sudo docker-compose -f $COMPOSE_FILE start $SERVICE_NAME
+
+  environment:
+    name: production
+    url: http://$PRODUCTION_DOMAIN/
+  tags: 
+    - prod
+  when: manual
+  only:
+      - master

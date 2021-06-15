@@ -1,0 +1,66 @@
+stages:
+  - build
+  - staging
+  - deploy
+
+cache:
+  paths:
+  - node_modules/
+
+variables:
+  STAGING_DOMAIN : staging.emdad.rup.ir
+  PRODUCTION_DOMAIN : emdad.rup.ir
+  APP_ROOT: /var/apps/benefactors
+
+build website:
+  stage: build
+  image: node:lts-alpine
+  script:
+    - apk update
+    - apk add yarn
+    - yarn install
+    - npm run-script build
+  artifacts:
+    paths:
+      - ./build
+  tags: 
+    - staging
+
+deploy_staging:
+  image : ictu/sshpass
+  variables:
+    SSHPASS: $INTERNET_SSHPASS
+    USER: root@$STAGING_DOMAIN
+    TARGET_PATH : root@$STAGING_DOMAIN:$APP_ROOT/docs
+  stage: staging
+  only:
+  - master
+  environment:
+    name: staging
+    url: https://$STAGING_DOMAIN/
+  script:
+    # sync `local/build` folder to `server/docs`
+    - sshpass -e rsync -e "ssh -o StrictHostKeyChecking=no" -avz ./build/* $TARGET_PATH --delete
+  tags: 
+    - staging
+
+deploy_prod:
+  #image : ictu/sshpass
+  variables:
+    SSHPASS: $BENEFACTORS_SSHPASS
+    USER: user@$PRODUCTION_DOMAIN
+    TARGET_PATH : user@$PRODUCTION_DOMAIN:$APP_ROOT/docs
+
+  stage: deploy
+  tags: 
+    - deploy-emdad
+  #when: manual
+  only:
+    - master
+  script:
+    # sync `local/build` folder to `server/docs`
+    - sshpass -e rsync -e "ssh -o StrictHostKeyChecking=no" -avz ./build/* $TARGET_PATH --delete
+
+  environment:
+    name: production
+    url: http://$PRODUCTION_DOMAIN:5001/
